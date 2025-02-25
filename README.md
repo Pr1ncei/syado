@@ -35,8 +35,7 @@ You can also download GitHub Desktop and open it with it on the clone section:
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## For Group Members
-`
-    Please update this file whenever new features or modifications are made.
-    Keep documentation clear and concise for future reference.
-    If you have any questions or suggestions, discuss them in our group chat.
-    Ensure all code contributions follow the project structure and coding standards.
+- Please update this file whenever new features or modifications are made.
+- Keep documentation clear and concise for future reference.
+- If you have any questions or suggestions, discuss them in our group chat.
+- Ensure all code contributions follow the project structure and coding standards.
