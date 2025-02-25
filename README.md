@@ -34,6 +34,13 @@ You can also download GitHub Desktop and open it with it on the clone section:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+## Authors & Contributors
+- Prince Pamintuan
+- Chen Zen Agustin
+- Masaharu Kayama
+- Sophia Pineda
+- Nathan Guintu
+
 ## For Group Members
 - Please update this file whenever new features or modifications are made.
 - Keep documentation clear and concise for future reference.
