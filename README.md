@@ -15,16 +15,16 @@ A Java-based system for managing user accounts in a computer shop or cyber café
    ```
 2. Navigate to the project directory:
   ```bash
-  cd ComShop-Account-Manager
+   cd ComShop-Account-Manager
   ```
 3. Compile the Java files:
-```bash
-    javac *.java
-```
+   ```bash
+   javac *.java
+   ```
 4. Run the main class:
-```bash
-    java Main
-```
+   ```bash
+   java Main
+   ```
 
 ## License
 
