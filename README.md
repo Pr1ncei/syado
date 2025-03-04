@@ -1,4 +1,4 @@
-# Computer Shop Account Management System
+# Syado: CLI Computer Shop Account Management System
 
 A Java-based system for managing user accounts in a computer shop or cyber café. It provides functionalities for account creation, balance tracking, session timers, and billing calculations.
 
