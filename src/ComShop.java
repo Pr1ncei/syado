@@ -18,7 +18,7 @@
   *
   * @author PROGSDATS Group 4 [CS-101]
   * @since 2024-02-24
-  * @version 1.0
+  * @version 1.1
   */
 
   import java.util.HashMap;
@@ -32,8 +32,6 @@
     public ComShop(){
       accounts = new HashMap<>();
     }
-
-
 
     // Method Header Template with Explanation
 
@@ -52,8 +50,6 @@
       System.out.println("Account is created successfully for " + username);
     }
 
-
-
     /**
      * Deletes account from the system
      * @param username The username of the account to be deleted
@@ -62,13 +58,11 @@
 
     public void deleteAccount(String username){
       if (!accounts.containsKey(username)) {
-        throw new IllegalArgumentException("Account is not found. Cannot delete."); 
+        throw new IllegalArgumentException("Account is not found. Cannot delete.");
       }
-      accounts.remove(username); 
-      System.out.println("Account " + username + " has been deleted."); 
-    } 
-
-
+      accounts.remove(username);
+      System.out.println("Account " + username + " has been deleted.");
+    }
 
     /**
      * Checks if an account exists in the system
@@ -76,10 +70,8 @@
      * @return True if the account exists in the system, false otherwise
      */
     public boolean checkAccountExist(String username){
-      return accounts.containsKey(username);  
+      return accounts.containsKey(username);
     }
-
-
 
      /**
      * Retrieves an account by username.
@@ -90,11 +82,9 @@
       return accounts.get(username); //returns the account if it exists, otherwise null
     }
 
-
-
   /* This displays all accounts in the system along with their details
    * If there are no accounts, it notifies the user.
-   * 
+   *
    */
     public void displayAllAccounts(){
       if (accounts.isEmpty()) {
