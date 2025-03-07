@@ -1,5 +1,5 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Admin{
     private Map<String, Accounts> accounts;
@@ -37,7 +37,8 @@ public class Admin{
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(STRING_FILE))){
             bw.write("Username,Password\n");
             for (Accounts account : accounts.values()){
-                bw.write(account.getUsername() + "," + account.getPassword());
+                bw.write(account.getUsername() + "," + account.getPassword() + "," + account.getBalance() + "\n");
+
             }
         } catch (IOException e){
             System.out.println("There was an error in saving accounts to CSV.");
@@ -52,11 +53,13 @@ public class Admin{
      * @throws IllegalArgumentException if the username already exists
      */
 
-    // Needs to add password parameter
-    public void addAccount(String username, Accounts account){
+
+    public void addAccount(String username, String password, double balance){
+        username = username.trim();
         if (accounts.containsKey(username)){
             throw new IllegalArgumentException("This username already exists!");
         }
+        Accounts account = new Accounts(username, password, balance);
         accounts.put(username, account);
         saveAccountsToCSV();
         System.out.println("Account is created successfully for " + username);
@@ -69,12 +72,13 @@ public class Admin{
      */
 
      public void deleteAccount(String username){
+        username = username.trim();
         if(!accounts.containsKey(username)){
             throw new IllegalArgumentException("Account is not found or no longer exists. Cannot delete");
         }
         accounts.remove(username);
         saveAccountsToCSV();
-        System.out.println("Account " + username + "has been deleted.");
+        System.out.println("Account " + username + " has been deleted.");
      }
 
      /*
@@ -86,11 +90,12 @@ public class Admin{
         return accounts.containsKey(username);
       }
 
-      /* 
-       * Retrieves an account by username.
-       * @param username The username of the account to retrieve
-       * @return True if the account object is found, or False/Null if the account does not exist or cannot retrieve  
-      */
+      
+        /*
+        * Retrieves an account by username.
+        * @param username The username of the account to retrieve.
+        * @return The account object if found, or null if the account does not exist.
+        */
       public Accounts getAccount(String username){
         return accounts.get(username);
       }
