@@ -14,36 +14,56 @@ public class Admin{
      * Loads Accounts from a CSV File (Database) and puts into a HashMap
      */
     private void loadAccountsFromCSV(){
-        try(BufferedReader br = new BufferedReader(new FileReader(STRING_FILE))){
+        try (BufferedReader br = new BufferedReader(new FileReader(STRING_FILE))) {
             String line;
-            br.readLine();
-            while ((line = br.readLine()) != null){
-                String[] tokens = line.split(","); 
-                if (tokens.length == 2){
+            br.readLine(); 
+            while ((line = br.readLine()) != null) {
+                String[] tokens = line.split(",");
+                if (tokens.length == 3) { 
                     String username = tokens[0].trim();
                     String password = tokens[1].trim();
-                    accounts.put(username, new Accounts(username,password));
+                    double balance = Double.parseDouble(tokens[2].trim()); // Read balance
+    
+                    accounts.put(username, new Accounts(username, password, balance));
                 }
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("No existing accounts found. Starting fresh.");
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Invalid balance format in CSV.");
         }
     }
-
+    
     /*
      * Saves the newly added accounts into a CSV
      */
-    private void saveAccountsToCSV(){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(STRING_FILE))){
-            bw.write("Username,Password\n");
-            for (Accounts account : accounts.values()){
-                bw.write(account.getUsername() + "," + account.getPassword() + "," + account.getBalance() + "\n");
-
+    private void saveAccountsToCSV() {
+        try {
+            // Ensure "database" folder exists
+            File dir = new File("database");
+            if (!dir.exists()) {
+                dir.mkdirs();
             }
-        } catch (IOException e){
-            System.out.println("There was an error in saving accounts to CSV.");
+    
+            File file = new File("database/accounts.csv");
+            boolean fileExists = file.exists();
+    
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, false)); // Overwrite file
+            bw.write("Username,Password,Balance\n"); // CSV Header
+    
+            for (Accounts account : accounts.values()) {
+                bw.write(account.getUsername() + "," + account.getPassword() + "," + account.getBalance() + "\n");
+            }
+    
+            bw.close();
+            System.out.println("Accounts saved successfully!");
+    
+        } catch (IOException e) {
+            System.out.println("Error: Could not save accounts to CSV. " + e.getMessage());
         }
     }
+    
+    
 
     /*
      * Adds a new account to the system 
@@ -54,16 +74,24 @@ public class Admin{
      */
 
 
-    public void addAccount(String username, String password, double balance){
+     public void addAccount(String username, String password, double balance) {
         username = username.trim();
-        if (accounts.containsKey(username)){
-            throw new IllegalArgumentException("This username already exists!");
+    
+        if (accounts.containsKey(username)) {
+            System.out.println("Error: Username already exists! Please choose a different username.");
+            return; // Stops execution if username is taken
         }
-        Accounts account = new Accounts(username, password, balance);
-        accounts.put(username, account);
+    
+        // Proceed only if username is unique
+        Accounts newAccount = new Accounts(username, password, balance);
+        accounts.put(username, newAccount);
         saveAccountsToCSV();
-        System.out.println("Account is created successfully for " + username);
+        
+        // This message only appears when the account is created
+        System.out.println("Account successfully created! Please log in.");
     }
+    
+    
 
     /*
      * Deletes account from the system
@@ -74,7 +102,8 @@ public class Admin{
      public void deleteAccount(String username){
         username = username.trim();
         if(!accounts.containsKey(username)){
-            throw new IllegalArgumentException("Account is not found or no longer exists. Cannot delete");
+            System.out.println("Account is not found or no longer exists. Cannot delete");
+            return;
         }
         accounts.remove(username);
         saveAccountsToCSV();

@@ -1,32 +1,38 @@
-// Reads all the accounts in CSV
-import java.util.*;
-public class Users{
+import java.io.*;
 
-    private static List<Accounts> users;
-
-    private static synchronized void readUsers(){
-        if(null == users){
-            users = new ArrayList<Accounts>();
-            String file = ("database/accounts.csv");
-            Scanner scan = new Scanner(Accounts.class.getResourceAsStream(file));
-            
-            if (scan.hasNextLine()){
-                scan.nextLine();
+public class Users {
+    public static synchronized boolean find(String username, String password) {
+        try {
+            File file = new File("database/accounts.csv");
+            if (!file.exists()) {
+                System.out.println("Error: accounts.csv file not found.");
+                return false;
             }
 
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            br.readLine();
 
-            while(scan.hasNextLine()){
-                String[] tokens = scan.nextLine().split(",");
-                users.add(new Accounts(tokens[0].trim(), tokens[1].trim()));
+            while ((line = br.readLine()) != null) {
+                String[] tokens = line.split(",");
+                if (tokens.length >= 2) {
+                    String storedUsername = tokens[0].trim();
+                    String storedPassword = tokens[1].trim();
+
+                    if (storedUsername.equals(username) && storedPassword.equals(password)) {
+                        br.close();
+                        System.out.println("Login successful!");
+                        return true;
+                    }
+                }
             }
-            scan.close();
+
+            br.close();
+        } catch (IOException e) {
+            System.out.println("Error reading user data: " + e.getMessage());
         }
-    }
 
-    public static synchronized boolean find(String username, String password){
-        readUsers(); // Ensure data is loaded
-        return users.stream()
-            .anyMatch(u -> u.getUsername().equals(username) && u.getPassword().equals(password));
+        System.out.println("Login failed.");
+        return false;
     }
-
 }
