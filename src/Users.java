@@ -1,32 +1,31 @@
-// Reads all the accounts in CSV
+import java.io.*;
 import java.util.*;
-public class Users{
 
+public class Users {
     private static List<Accounts> users;
 
-    private static synchronized void readUsers(){
-        if(null == users){
-            users = new ArrayList<Accounts>();
-            String file = ("database/accounts.csv");
-            Scanner scan = new Scanner(Accounts.class.getResourceAsStream(file));
-            
-            if (scan.hasNextLine()){
-                scan.nextLine();
-            }
+    public static synchronized void readUsers() {
+        if (users == null) {
+            users = new ArrayList<>();
+            String file = "database/accounts.csv"; // Adjust the path as necessary
+            try (Scanner scan = new Scanner(new File(file))) {
+                if (scan.hasNextLine()) {
+                    scan.nextLine();
+                }
 
-
-            while(scan.hasNextLine()){
-                String[] tokens = scan.nextLine().split(",");
-                users.add(new Accounts(tokens[0].trim(), tokens[1].trim()));
+                while (scan.hasNextLine()) {
+                    String[] tokens = scan.nextLine().split(",");
+                    users.add(new Accounts(tokens[0].trim(), tokens[1].trim(), Double.parseDouble(tokens[2].trim())));
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("Error: File not found.");
             }
-            scan.close();
         }
     }
 
-    public static synchronized boolean find(String username, String password){
+    public static synchronized boolean find(String username, String password) {
         readUsers(); // Ensure data is loaded
         return users.stream()
             .anyMatch(u -> u.getUsername().equals(username) && u.getPassword().equals(password));
     }
-
 }
