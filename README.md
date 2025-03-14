@@ -22,13 +22,16 @@ You can also download GitHub Desktop and open it with it on the clone section:
    ```bash
    cd ComShop-Account-Manager
    ```
+   
 3. Compile the Java files:
    ```bash
-   javac *.java
+   javac -d bin -cp src src/main/Main.java src/database/*.java src/Utilities/*.java
    ```
+   That is used to put the .class files in the bin folder to run it.
+
 4. Run the main class:
    ```bash
-   java Main
+   java -cp bin main.Main
    ```
 
 ## License
