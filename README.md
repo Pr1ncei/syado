@@ -7,6 +7,7 @@ A Java-based system for managing user accounts in a computer shop or cyber café
 - ✅ Balance tracking and updates
 - ✅ Automated session timer based on balance
 - ✅ Simple and efficient account management
+- ✅ Admin access for security
 
 ## Installation
 1. Clone the repository:
