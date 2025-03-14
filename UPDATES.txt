@@ -1,0 +1,10 @@
+Major Update:
+
+- Implementation of CSV connection from Admin, Users and Main.java files\
+- Additional Option: Check Balance, Initiate Timer and Stop Timer\
+- Added Boolean checker\
+
+Suggestions to add
+
+- Update Balance from CSV everytime a balance is added or updated
+- Admin Account
