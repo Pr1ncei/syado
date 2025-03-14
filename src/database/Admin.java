@@ -6,15 +6,16 @@ import java.util.*;
 public class Admin {
     private Map<String, Accounts> accounts;
     private static final String STRING_FILE = new File("src", "database/accounts.csv").getPath();
+    
+    // Admin credentials (change if needed)
+    private static final String ADMIN_USERNAME = "admin";
+    private static final String ADMIN_PASSWORD = "admin123";
 
     public Admin() {
         accounts = new HashMap<>();
-        loadAccountsFromCSV(); // Load existing accounts
+        loadAccountsFromCSV();
     }
 
-    /*
-     * Loads Accounts from a CSV File (Database) and puts into a HashMap
-     */
     private void loadAccountsFromCSV() {
         File file = new File(STRING_FILE);
         
@@ -42,12 +43,9 @@ public class Admin {
         }
     }
 
-    /*
-     * Saves the newly added accounts into a CSV
-     */
     private void saveAccountsToCSV() {
         File file = new File(STRING_FILE);
-        file.getParentFile().mkdirs(); // Ensure "src/database" folder exists
+        file.getParentFile().mkdirs();
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             bw.write("Username,Password,Balance\n");
@@ -67,14 +65,12 @@ public class Admin {
         Accounts account = new Accounts(username, password);
         accounts.put(username, account);
         saveAccountsToCSV();
-        
-        // This message only appears when the account is created
         System.out.println("Account successfully created! Please log in.");
     }
 
     public void deleteAccount(String username) {
         if (!accounts.containsKey(username)) {
-            throw new IllegalArgumentException("Account is not found or no longer exists. Cannot delete");
+            throw new IllegalArgumentException("Account not found. Cannot delete.");
         }
         accounts.remove(username);
         saveAccountsToCSV();
@@ -99,5 +95,10 @@ public class Admin {
                 System.out.println("---------------");
             }
         }
+    }
+
+    // Admin login check
+    public boolean isAdmin(String username, String password) {
+        return username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD);
     }
 }

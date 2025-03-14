@@ -1,9 +1,8 @@
 package main;
-import java.util.*;
-
 import database.Accounts;
-import database.Admin; 
+import database.Admin;
 import database.Users;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,8 +11,8 @@ public class Main {
         Accounts loggedInAccount = null; // To keep track of the logged-in account
 
         while (true) {
-            if (loggedInAccount == null) {
-                // Main menu for account management
+            if (loggedInAccount == null) { 
+            // Main menu for account management
                 System.out.println("Welcome to the Computer Shop Account Management System");
                 System.out.println("1. Create Account");
                 System.out.println("2. Log In");
@@ -43,9 +42,46 @@ public class Main {
                         System.out.print("Enter password: ");
                         String loginPassword = input.nextLine();
 
-                        if (Users.find(loginUsername, loginPassword)) {
-                            loggedInAccount = admin.getAccount(loginUsername); // Retrieve the actual account object
-                        
+                        if (admin.isAdmin(loginUsername, loginPassword)) {
+                            // Admin-specific options
+                            System.out.println("Logged in as ADMIN");
+
+                            while (true) {
+                                System.out.println("\nAdmin Options:");
+                                System.out.println("1. Delete Account");
+                                System.out.println("2. Display All Accounts");
+                                System.out.println("3. Log Out");
+                                System.out.print("Choose an option: ");
+                                int adminChoice = input.nextInt();
+                                input.nextLine();
+
+                                switch (adminChoice) {
+                                    case 1:
+                                        System.out.print("Enter username to delete: ");
+                                        String deleteUsername = input.nextLine();
+                                        try {
+                                            admin.deleteAccount(deleteUsername);
+                                        } catch (IllegalArgumentException e) {
+                                            System.out.println(e.getMessage());
+                                        }
+                                        break;
+
+                                    case 2:
+                                        admin.displayAllAccounts();
+                                        break;
+
+                                    case 3:
+                                        System.out.println("Admin logged out.");
+                                        break;
+
+                                    default:
+                                        System.out.println("Invalid option. Try again.");
+                                }
+                                if (adminChoice == 3) break;
+                            }
+                        } else if (Users.find(loginUsername, loginPassword)) { // Retrieve the actual account object
+                            loggedInAccount = admin.getAccount(loginUsername);
+
                             if (loggedInAccount != null) {
                                 System.out.println("You are logged in as " + loggedInAccount.getUsername());
                                 System.out.println("Current Balance: P" + loggedInAccount.getBalance());
@@ -54,7 +90,7 @@ public class Main {
                             }
 
                             // User management options after logging in
-                            while (true) {
+                            while (true) {  
                                 System.out.println("1. Add Balance");
                                 System.out.println("2. Initiate Timer");
                                 System.out.println("3. Check Remaining Time");
@@ -67,29 +103,25 @@ public class Main {
 
                                 switch (userChoice) {
                                     case 1:
-                                        System.out.print("Enter the amount to add to your balance: ");
+                                        System.out.print("Enter amount to add: ");
                                         double amountToAdd = input.nextDouble();
                                         if (amountToAdd > 0) {
                                             loggedInAccount.deposit(amountToAdd);
-                                            System.out.println("Balance updated. New Balance: P" + loggedInAccount.getBalance());
+                                            System.out.println("Balance updated: P" + loggedInAccount.getBalance());
                                         } else {
-                                            System.out.println("Invalid amount. Please enter a positive value.");
+                                            System.out.println("Invalid amount.");
                                         }
                                         break;
 
                                     case 2:
-                                        System.out.print("Enter the number of minutes to initiate the timer: ");
+                                        System.out.print("Enter timer minutes: ");
                                         int minutes = input.nextInt();
                                         loggedInAccount.initiateTimer(minutes);
-                                        System.out.println("Timer initiated for " + minutes + " minutes.");
+                                        System.out.println("Timer started for " + minutes + " minutes.");
                                         break;
 
                                     case 3:
-                                        if (loggedInAccount.isTimerRunning()) {
-                                            System.out.println("Remaining Time: " + loggedInAccount.getRemainingTime() + " minutes");
-                                        } else {
-                                            System.out.println("Timer is not running.");
-                                        }
+                                        System.out.println("Remaining Time: " + loggedInAccount.getRemainingTime() + " minutes");
                                         break;
 
                                     case 4:
@@ -98,27 +130,22 @@ public class Main {
                                         break;
 
                                     case 5:
-                                        loggedInAccount.stopTimer();
-                                        loggedInAccount = null; // Log out
-                                        System.out.println("You have logged out.");
+                                        loggedInAccount = null;
+                                        System.out.println("Logged out."); // Log out
                                         break;
 
                                     case 6: // Exit
-                                        System.out.println("Exiting the system. Goodbye!");
+                                        System.out.println("Exiting system.");
                                         input.close();
                                         return;
 
                                     default:
-                                        System.out.println("Invalid option. Please try again.");
+                                        System.out.println("Invalid option.");
                                 }
-
-                                // If the user logs out, break the inner loop
-                                if (loggedInAccount == null) {
-                                    break;
-                                }
+                                if (loggedInAccount == null) break; // If the user logs out, break the inner loop
                             }
                         } else {
-                            System.out.println("Log in failed. Invalid username or password.");
+                            System.out.println("Invalid login.");
                         }
                         break;
 
@@ -127,14 +154,15 @@ public class Main {
                         break;
 
                     case 4: // Exit
-                        System.out.println("Exiting the system. Goodbye!");
+                        System.out.println("Exiting the system.");
                         input.close();
                         return;
 
                     default:
-                        System.out.println("Invalid option. Please try again.");
+                        System.out.println("Invalid option.");
                 }
             }
         }
     }
 }
+
