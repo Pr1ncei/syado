@@ -3,18 +3,25 @@ import java.util.*;
 
 public class Admin {
     private Map<String, Accounts> accounts;
-    private static final String STRING_FILE = "src/database/accounts.csv";
+    private static final String STRING_FILE = new File("src", "database/accounts.csv").getPath();
 
     public Admin() {
         accounts = new HashMap<>();
         loadAccountsFromCSV(); // Load existing accounts
     }
-  
-     /*
+
+    /*
      * Loads Accounts from a CSV File (Database) and puts into a HashMap
      */
     private void loadAccountsFromCSV() {
-        try (BufferedReader br = new BufferedReader(new FileReader(STRING_FILE))) {
+        File file = new File(STRING_FILE);
+        
+        if (!file.exists()) {
+            System.out.println("No existing accounts found. Starting fresh.");
+            return;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             br.readLine(); // Skip header
             while ((line = br.readLine()) != null) {
@@ -27,28 +34,30 @@ public class Admin {
                 }
             }
         } catch (IOException e) {
-            System.out.println("No existing accounts found. Starting fresh.");
+            System.out.println("Error reading accounts file: " + e.getMessage());
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid balance format in CSV.");
         }
     }
 
-     /*
+    /*
      * Saves the newly added accounts into a CSV
      */
     private void saveAccountsToCSV() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(STRING_FILE))) {
+        File file = new File(STRING_FILE);
+        file.getParentFile().mkdirs(); // Ensure "src/database" folder exists
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             bw.write("Username,Password,Balance\n");
             for (Accounts account : accounts.values()) {
                 bw.write(account.getUsername() + "," + account.getPassword() + "," + account.getBalance() + "\n");
             }
-            System.out.println("Accounts saved successfully.");
+            System.out.println("Accounts saved successfully at: " + file.getAbsolutePath());
         } catch (IOException e) {
-            System.out.println("There was an error in saving accounts to CSV: " + e.getMessage());
-            e.printStackTrace(); // Print the stack trace for debugging
+            System.out.println("Error saving accounts: " + e.getMessage());
         }
     }
-    
+
     public void addAccount(String username, String password) {
         if (accounts.containsKey(username)) {
             throw new IllegalArgumentException("This username already exists!");
@@ -60,7 +69,7 @@ public class Admin {
         // This message only appears when the account is created
         System.out.println("Account successfully created! Please log in.");
     }
-  
+
     public void deleteAccount(String username) {
         if (!accounts.containsKey(username)) {
             throw new IllegalArgumentException("Account is not found or no longer exists. Cannot delete");
