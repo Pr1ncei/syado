@@ -9,7 +9,10 @@ public class Admin {
         accounts = new HashMap<>();
         loadAccountsFromCSV(); // Load existing accounts
     }
-
+  
+     /*
+     * Loads Accounts from a CSV File (Database) and puts into a HashMap
+     */
     private void loadAccountsFromCSV() {
         try (BufferedReader br = new BufferedReader(new FileReader(STRING_FILE))) {
             String line;
@@ -25,9 +28,14 @@ public class Admin {
             }
         } catch (IOException e) {
             System.out.println("No existing accounts found. Starting fresh.");
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Invalid balance format in CSV.");
         }
     }
 
+     /*
+     * Saves the newly added accounts into a CSV
+     */
     private void saveAccountsToCSV() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(STRING_FILE))) {
             bw.write("Username,Password,Balance\n");
@@ -40,7 +48,7 @@ public class Admin {
             e.printStackTrace(); // Print the stack trace for debugging
         }
     }
-
+    
     public void addAccount(String username, String password) {
         if (accounts.containsKey(username)) {
             throw new IllegalArgumentException("This username already exists!");
@@ -48,9 +56,11 @@ public class Admin {
         Accounts account = new Accounts(username, password);
         accounts.put(username, account);
         saveAccountsToCSV();
-        System.out.println("Account is created successfully for " + username);
+        
+        // This message only appears when the account is created
+        System.out.println("Account successfully created! Please log in.");
     }
-
+  
     public void deleteAccount(String username) {
         if (!accounts.containsKey(username)) {
             throw new IllegalArgumentException("Account is not found or no longer exists. Cannot delete");

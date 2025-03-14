@@ -33,11 +33,6 @@ public class Main {
                         break;
 
                     case 2:
-                        System.out.print("Enter username: ");
-                        username = input.nextLine();
-                        System.out.print("Enter password: ");
-                        password = input.nextLine();
-
                         Accounts account = admin.getAccount(username);
                         if (account != null && account.getPassword().equals(password)) {
                             loggedInAccount = account; // Set the logged-in account

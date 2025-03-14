@@ -21,6 +21,7 @@ public class Accounts {
     }
 
     // Getter methods
+
     public String getUsername() {
         return username;
     }

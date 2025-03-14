@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.*;
 
 public class Users {
@@ -21,7 +20,6 @@ public class Users {
                 System.out.println("Error: File not found.");
             }
         }
-    }
 
     public static synchronized boolean find(String username, String password) {
         readUsers(); // Ensure data is loaded
