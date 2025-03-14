@@ -1,12 +1,16 @@
+import java.util.TimerTask;
+
 public class Timer {
     private double balance;
     private boolean running;
     private int remainingTime;
+    private java.util.Timer timer; // Use java.util.Timer
 
     public Timer(double initialBalance) {
         this.balance = initialBalance;
         this.running = false;
         this.remainingTime = 0;
+        this.timer = new java.util.Timer(); // Initialize the Timer
     }
 
     public void initiateTimer(int minutes) {
@@ -19,32 +23,27 @@ public class Timer {
             running = true;
             remainingTime = minutes;
 
-            // Start the countdown timer
-            new Thread(() -> startCountdown()).start();
+            // Schedule the countdown task
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (remainingTime > 0 && running) {
+                        remainingTime--;
+                    } else {
+                        running = false; // Timer finished
+                        System.out.println("Timer finished!");
+                        cancel(); // Stop the timer
+                    }
+                }
+            }, 0, 60000); // Run every minute
         } else {
             System.out.println("Insufficient balance to initiate timer.");
         }
     }
 
-    private void startCountdown() {
-        while (remainingTime > 0 && running) {
-            try {
-                Thread.sleep(60000); // Sleep for 1 minute
-                remainingTime--;
-            } catch (InterruptedException e) {
-                System.out.println("Timer was interrupted.");
-                return; // Exit the method if interrupted
-            }
-        }
-
-        running = false; // Timer finished
-        if (remainingTime == 0) {
-            System.out.println("Timer finished!");
-        }
-    }
-
     public void stopTimer() {
         running = false; // Stop the timer
+        timer.cancel(); // Cancel the timer
     }
 
     public boolean isRunning() {
