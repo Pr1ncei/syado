@@ -20,7 +20,8 @@ public class Users {
                 System.out.println("Error: File not found.");
             }
         }
-
+    }
+    
     public static synchronized boolean find(String username, String password) {
         readUsers(); // Ensure data is loaded
         return users.stream()
