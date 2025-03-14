@@ -1,107 +1,127 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        Admin admin = new Admin();
-        boolean running = true;
-        boolean loggedIn = false;
-        String username = "";
-        String password = "";
+        Admin admin = new Admin(); // Create an instance of Admin
+        Accounts loggedInAccount = null; // To keep track of the logged-in account
 
-        while (running) {
-            System.out.println("\n=== Computer Shop Account Management System ===");
-            System.out.println("1. Log In");
-            System.out.println("2. Create Account");
-            System.out.println("3. Delete Account");
-            System.out.println("4. Add Balance");
-            System.out.println("5. Start Session");
-            System.out.println("6. Exit");
+        while (true) {
+            if (loggedInAccount == null) {
+                // Main menu for account management
+                System.out.println("Welcome to the Computer Shop Account Management System");
+                System.out.println("1. Create Account");
+                System.out.println("2. Log In");
+                System.out.println("3. Display All Accounts");
+                System.out.println("4. Exit");
+                System.out.print("Choose an option: ");
+                int choice = input.nextInt();
+                input.nextLine();
 
-            System.out.print("Enter choice: ");
-
-            int choice = input.nextInt();
-            input.nextLine();
-
-            switch (choice) {
-                case 1: // LOG IN
-                    if (loggedIn) {
-                        System.out.println("You are already logged in as " + username + ".");
-                    } else {
+                switch (choice) {
+                    case 1:
                         System.out.print("Enter username: ");
-                        username = input.nextLine();
+                        String username = input.nextLine();
                         System.out.print("Enter password: ");
-                        password = input.nextLine();
+                        String password = input.nextLine();
 
-                        if (Users.find(username, password)) {
-                            System.out.println("Login successful! Welcome, " + username + "!");
-                            loggedIn = true;
-                        } else {
-                            System.out.println("Login failed. Please try again.");
+                        try {
+                            admin.addAccount(username, password);
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(e.getMessage());
                         }
-                    }
-                    break;
-                case 2: // CREATE ACCOUNT
-                    System.out.print("Enter new username: ");
-                    String newUsername = input.nextLine();
-                    System.out.print("Enter new password: ");
-                    String newPassword = input.nextLine();
+                        break;
 
-                    System.out.print("Enter initial balance: ");
-                    double balance = input.nextDouble();
-                    input.nextLine(); 
+                    case 2:
+                        Accounts account = admin.getAccount(username);
+                        if (account != null && account.getPassword().equals(password)) {
+                            loggedInAccount = account; // Set the logged-in account
+                            System.out.println("You are logged in as " + loggedInAccount.getUsername());
+                            System.out.println("Current Balance: P" + loggedInAccount.getBalance()); // Display balance
 
-                    admin.addAccount(newUsername, newPassword, balance);
-                    break;
+                            // User management options after logging in
+                            while (true) {
+                                System.out.println("1. Add Balance");
+                                System.out.println("2. Initiate Timer");
+                                System.out.println("3. Check Remaining Time");
+                                System.out.println("4. Stop Timer");
+                                System.out.println("5. Log Out");
+                                System.out.println("6. Exit");
+                                System.out.print("Choose an option: ");
+                                int userChoice = input.nextInt();
+                                input.nextLine();
 
-                case 3: // DELETE ACCOUNT
-                    System.out.print("Enter username to delete: ");
-                    String deleteUser = input.nextLine();
-                    admin.deleteAccount(deleteUser);
-                    break;
+                                switch (userChoice) {
+                                    case 1:
+                                        System.out.print("Enter the amount to add to your balance: ");
+                                        double amountToAdd = input.nextDouble();
+                                        if (amountToAdd > 0) {
+                                            loggedInAccount.deposit(amountToAdd);
+                                            System.out.println("Balance updated. New Balance: P" + loggedInAccount.getBalance());
+                                        } else {
+                                            System.out.println("Invalid amount. Please enter a positive value.");
+                                        }
+                                        break;
 
-                case 4: // ADD BALANCE
-                    System.out.print("Enter username: ");
-                    String userToAddBalance = input.nextLine();
-                    if (admin.checkAccountExist(userToAddBalance)) {
-                        System.out.print("Enter amount to add: ");
-                        double amount = input.nextDouble();
-                        input.nextLine(); 
-                        admin.getAccount(userToAddBalance).deposit(amount);
-                        System.out.println("Balance added successfully.");
-                    } else {
-                        System.out.println("Account not found.");
-                    }
-                    break;
+                                    case 2:
+                                        System.out.print("Enter the number of minutes to initiate the timer: ");
+                                        int minutes = input.nextInt();
+                                        loggedInAccount.initiateTimer(minutes);
+                                        // Do not show remaining time or balance text
+                                        System.out.println("Timer initiated for " + minutes + " minutes.");
+                                        break;
 
-                case 5: // START SESSION
-                    if (!loggedIn) {
-                        System.out.println("You must log in first to start a session.");
-                    } else {
-                        System.out.println("Starting session for " + username + "...");
-                        //timer code here
-                    }
-                    break;
+                                    case 3:
+                                        if (loggedInAccount.isTimerRunning()) {
+                                            System.out.println("Remaining Time: " + loggedInAccount.getRemainingTime() + " minutes");
+                                        } else {
+                                            System.out.println("Timer is not running.");
+                                        }
+                                        break;
 
-                case 6: // EXIT
-                    System.out.println("Exiting system...");
-                    input.close();
-                    return;
+                                    case 4:
+                                        loggedInAccount.stopTimer();
+                                        System.out.println("Timer stopped.");
+                                        break;
 
-                default:
-                    System.out.println("Invalid choice. Please enter a number between 1 and 6.");
+                                    case 5:
+                                        loggedInAccount.stopTimer();
+                                        loggedInAccount = null; // Log out
+                                        System.out.println("You have logged out.");
+                                        break;
+
+                                    case 6: // Exit
+                                        System.out.println("Exiting the system. Goodbye!");
+                                        input.close();
+                                        return;
+
+                                    default:
+                                        System.out.println("Invalid option. Please try again.");
+                                }
+
+                                // If the user logs out, break the inner loop
+                                if (loggedInAccount == null) {
+                                    break;
+                                }
+                            }
+                        } else {
+                            System.out.println("Log in failed. Invalid username or password.");
+                        }
+                        break;
+
+                    case 3:
+                        admin.displayAllAccounts();
+                        break;
+
+                    case 4: // Exit
+                        System.out.println("Exiting the system. Goodbye!");
+                        input.close();
+                        return;
+
+                    default:
+                        System.out.println("Invalid option. Please try again.");
+                }
             }
         }
     }
 }
-
-/*  
- * Implemented:  
- * - Prevents duplicate usernames (throws error if username exists in CSV)  
- * - Successfully appends new account data to CSV  
- * - creates new csv if it doesn't exist
- *  
- * Pending Implementation:  
- * - Balance calculation after session  
- */
-
