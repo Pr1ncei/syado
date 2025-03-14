@@ -1,8 +1,8 @@
 Major Update:
 
-- Implementation of CSV connection from Admin, Users and Main.java files\
-- Additional Option: Check Balance, Initiate Timer and Stop Timer\
-- Added Boolean checker\
+- Implementation of CSV connection from Admin, Users and Main.java files
+- Additional Option: Check Balance, Initiate Timer and Stop Timer
+- Added Boolean checker
 
 Suggestions to add
 
