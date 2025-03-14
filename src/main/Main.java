@@ -1,4 +1,9 @@
+package main;
 import java.util.*;
+
+import database.Accounts;
+import database.Admin; 
+import database.Users;
 
 public class Main {
     public static void main(String[] args) {
@@ -38,11 +43,15 @@ public class Main {
                         System.out.print("Enter password: ");
                         String loginPassword = input.nextLine();
 
-                        Accounts account = admin.getAccount(loginUsername);
-                        if (account != null && account.getPassword().equals(loginPassword)) {
-                            loggedInAccount = account; // Set the logged-in account
-                            System.out.println("You are logged in as " + loggedInAccount.getUsername());
-                            System.out.println("Current Balance: P" + loggedInAccount.getBalance()); // Display balance
+                        if (Users.find(loginUsername, loginPassword)) {
+                            loggedInAccount = admin.getAccount(loginUsername); // Retrieve the actual account object
+                        
+                            if (loggedInAccount != null) {
+                                System.out.println("You are logged in as " + loggedInAccount.getUsername());
+                                System.out.println("Current Balance: P" + loggedInAccount.getBalance());
+                            } else {
+                                System.out.println("Error: Account exists in file but not in memory.");
+                            }
 
                             // User management options after logging in
                             while (true) {

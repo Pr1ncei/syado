@@ -1,3 +1,7 @@
+package database;
+
+import Utilities.Timer;
+
 public class Accounts {
     private String username;
     private String password;

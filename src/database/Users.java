@@ -1,3 +1,5 @@
+package database;
+
 import java.util.*;
 import java.io.*;
 
@@ -7,7 +9,7 @@ public class Users {
     public static synchronized void readUsers() {
         if (users == null) {
             users = new ArrayList<>();
-            String file = "database/accounts.csv"; // Adjust the path as necessary
+            String file = "src/database/accounts.csv"; // Adjust the path as necessary
             try (Scanner scan = new Scanner(new File(file))) {
                 if (scan.hasNextLine()) {
                     scan.nextLine();
