@@ -33,8 +33,13 @@ public class Main {
                         break;
 
                     case 2:
-                        Accounts account = admin.getAccount(username);
-                        if (account != null && account.getPassword().equals(password)) {
+                        System.out.print("Enter username: ");
+                        String loginUsername = input.nextLine();
+                        System.out.print("Enter password: ");
+                        String loginPassword = input.nextLine();
+
+                        Accounts account = admin.getAccount(loginUsername);
+                        if (account != null && account.getPassword().equals(loginPassword)) {
                             loggedInAccount = account; // Set the logged-in account
                             System.out.println("You are logged in as " + loggedInAccount.getUsername());
                             System.out.println("Current Balance: P" + loggedInAccount.getBalance()); // Display balance
@@ -67,7 +72,6 @@ public class Main {
                                         System.out.print("Enter the number of minutes to initiate the timer: ");
                                         int minutes = input.nextInt();
                                         loggedInAccount.initiateTimer(minutes);
-                                        // Do not show remaining time or balance text
                                         System.out.println("Timer initiated for " + minutes + " minutes.");
                                         break;
 
