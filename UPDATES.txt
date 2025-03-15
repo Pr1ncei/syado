@@ -7,4 +7,6 @@ Major Update:
 Suggestions to add
 
 - Update Balance from CSV everytime a balance is added or updated
-- Admin Account
+
+Tests: 
+- Haven't done it yet - Prince
