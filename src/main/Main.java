@@ -12,7 +12,7 @@ public class Main {
 
         while (true) {
             if (loggedInAccount == null) { 
-            // Main menu for account management
+                // Main menu for account management
                 System.out.println("Welcome to the Computer Shop Account Management System");
                 System.out.println("1. Create Account");
                 System.out.println("2. Log In");
@@ -50,7 +50,8 @@ public class Main {
                                 System.out.println("\nAdmin Options:");
                                 System.out.println("1. Delete Account");
                                 System.out.println("2. Display All Accounts");
-                                System.out.println("3. Log Out");
+                                System.out.println("3. Stop User Timer");
+                                System.out.println("4. Log Out");
                                 System.out.print("Choose an option: ");
                                 int adminChoice = input.nextInt();
                                 input.nextLine();
@@ -71,13 +72,25 @@ public class Main {
                                         break;
 
                                     case 3:
+                                        System.out.print("Enter username to stop timer: ");
+                                        String stopUser = input.nextLine();
+                                        Accounts accountToStop = admin.getAccount(stopUser);
+                                        if (accountToStop != null) {
+                                            accountToStop.stopTimer();
+                                            System.out.println("Timer stopped for " + stopUser);
+                                        } else {
+                                            System.out.println("User not found.");
+                                        }
+                                        break;
+
+                                    case 4:
                                         System.out.println("Admin logged out.");
                                         break;
 
                                     default:
                                         System.out.println("Invalid option. Try again.");
                                 }
-                                if (adminChoice == 3) break;
+                                if (adminChoice == 4) break;
                             }
                         } else if (Users.find(loginUsername, loginPassword)) { // Retrieve the actual account object
                             loggedInAccount = admin.getAccount(loginUsername);
@@ -94,9 +107,8 @@ public class Main {
                                 System.out.println("1. Add Balance");
                                 System.out.println("2. Initiate Timer");
                                 System.out.println("3. Check Remaining Time");
-                                System.out.println("4. Stop Timer");
-                                System.out.println("5. Log Out");
-                                System.out.println("6. Exit");
+                                System.out.println("4. Log Out");
+                                System.out.println("5. Exit");
                                 System.out.print("Choose an option: ");
                                 int userChoice = input.nextInt();
                                 input.nextLine();
@@ -125,16 +137,11 @@ public class Main {
                                         break;
 
                                     case 4:
-                                        loggedInAccount.stopTimer();
-                                        System.out.println("Timer stopped.");
-                                        break;
-
-                                    case 5:
                                         loggedInAccount = null;
                                         System.out.println("Logged out."); // Log out
                                         break;
 
-                                    case 6: // Exit
+                                    case 5: // Exit
                                         System.out.println("Exiting system.");
                                         input.close();
                                         return;
@@ -165,4 +172,3 @@ public class Main {
         }
     }
 }
-
