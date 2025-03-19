@@ -52,7 +52,6 @@ public class Admin {
             for (Accounts account : accounts.values()) {
                 bw.write(account.getUsername() + "," + account.getPassword() + "," + account.getBalance() + "\n");
             }
-            System.out.println("Accounts saved successfully at: " + file.getAbsolutePath());
         } catch (IOException e) {
             System.out.println("Error saving accounts: " + e.getMessage());
         }
@@ -100,5 +99,10 @@ public class Admin {
     // Admin login check
     public boolean isAdmin(String username, String password) {
         return username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD);
+    }
+
+    public void refreshAccounts() {
+        accounts.clear(); // Clear existing accounts
+        loadAccountsFromCSV(); // Reload accounts from the CSV file
     }
 }
