@@ -12,7 +12,7 @@ A Java-based system for managing user accounts in a computer shop or cyber café
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/ComShop-Account-Manager.git 
+   git clone https://github.com/Pr1ncei/ComShop-Account-Manager.git 
    ```
 You can also download GitHub Desktop and open it with it on the clone section:
 
