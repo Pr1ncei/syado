@@ -7,8 +7,8 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        Admin admin = new Admin(); // Create an instance of Admin
-        Accounts loggedInAccount = null; // To keep track of the logged-in account
+        Admin admin = new Admin(); 
+        Accounts loggedInAccount = null; 
 
         while (true) {
             if (loggedInAccount == null) { 
@@ -142,7 +142,7 @@ public class Main {
                                     default:
                                         System.out.println("Invalid option.");
                                 }
-                                if (loggedInAccount == null) break; // If the user logs out, break the inner loop
+                                if (loggedInAccount == null) break; 
                             }
                         } else {
                             System.out.println("Invalid login.");
