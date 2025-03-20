@@ -1,26 +1,14 @@
 package database;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.io.*;
-import java.util.*;
 
-/*
- * The Admin class manages and modifies user accounts 
- * by loading and saving accounts from a CSV file,
- * deleting and adding accounts, and also finding 
- * existing accounts as well
- */
-public class Admin {
+public class DatabaseManager {
     private Map<String, Accounts> accounts;
     private static final String STRING_FILE = new File("src", "database/accounts.csv").getPath();
-    
-    // Admin credentials (change if needed)
-    private static final String ADMIN_USERNAME = "admin";
-    private static final String ADMIN_PASSWORD = "admin123";
 
-    /*
-     * Initializes the Admin class and tools to manage the CSV file
-     */
-    public Admin() {
+    public DatabaseManager() {
         accounts = new HashMap<>();
         loadAccountsFromCSV();
     }
@@ -56,6 +44,7 @@ public class Admin {
         }
     }
 
+
     /*
      * Saves Account to the CSV File. 
      * Used for creating new accounts
@@ -74,52 +63,6 @@ public class Admin {
         }
     }
 
-    public void addAccount(String username, String password) {
-        if (accounts.containsKey(username)) {
-            throw new IllegalArgumentException("This username already exists!");
-        }
-        Accounts account = new Accounts(username, password);
-        accounts.put(username, account);
-        saveAccountsToCSV();
-        System.out.println("Account successfully created! Please log in.");
-    }
-
-    public void deleteAccount(String username) {
-        if (!accounts.containsKey(username)) {
-            throw new IllegalArgumentException("Account not found. Cannot delete.");
-        }
-        accounts.remove(username);
-        saveAccountsToCSV();
-        System.out.println("Account " + username + " has been deleted.");
-    }
-
-    public boolean checkAccountExist(String username) {
-        return accounts.containsKey(username);
-    }
-
-    public Accounts getAccount(String username) {
-        return accounts.get(username);
-    }
-
-    public void displayAllAccounts() {
-        if (accounts.isEmpty()) {
-            System.out.println("No accounts in the system");
-        } else {
-            System.out.println("List of accounts: ");
-            for (Accounts account : accounts.values()) {
-                account.displayAccountInfo();
-                System.out.println("---------------");
-            }
-        }
-    }
-
-    /*
-     * Checks if the inputted credentials matches with the admin account 
-     */
-    public boolean isAdmin(String username, String password) {
-        return username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD);
-    }
-
     /*
      * Reloads the files from the CSV file.
      * This is used when adding newly created accounts 
@@ -127,5 +70,17 @@ public class Admin {
     public void refreshAccounts() {
         accounts.clear(); 
         loadAccountsFromCSV(); 
+    }
+
+    public void loadAccounts(){
+        loadAccountsFromCSV();
+    }
+
+    public void saveAccounts(){
+        saveAccountsToCSV();
+    }
+
+    public Map<String, Accounts> getAccounts() {
+        return accounts;
     }
 }

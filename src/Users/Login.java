@@ -1,9 +1,12 @@
-package database;
+package Users;
 
 import java.util.*;
+
+import database.Accounts;
+
 import java.io.*;
 
-public class Users {
+public class Login {
     private static List<Accounts> users;
 
     public static synchronized void readUsers() {
