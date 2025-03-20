@@ -3,6 +3,12 @@ package database;
 import java.io.*;
 import java.util.*;
 
+/*
+ * The Admin class manages and modifies user accounts 
+ * by loading and saving accounts from a CSV file,
+ * deleting and adding accounts, and also finding 
+ * existing accounts as well
+ */
 public class Admin {
     private Map<String, Accounts> accounts;
     private static final String STRING_FILE = new File("src", "database/accounts.csv").getPath();
@@ -11,11 +17,18 @@ public class Admin {
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin123";
 
+    /*
+     * Initializes the Admin class and tools to manage the CSV file
+     */
     public Admin() {
         accounts = new HashMap<>();
         loadAccountsFromCSV();
     }
 
+    /*
+     * Loads Accounts from CSV 
+     * If the file does not exist, starts with an empty list
+     */
     private void loadAccountsFromCSV() {
         File file = new File(STRING_FILE);
         
@@ -43,6 +56,10 @@ public class Admin {
         }
     }
 
+    /*
+     * Saves Account to the CSV File. 
+     * Used for creating new accounts
+     */
     private void saveAccountsToCSV() {
         File file = new File(STRING_FILE);
         file.getParentFile().mkdirs();
@@ -96,13 +113,19 @@ public class Admin {
         }
     }
 
-    // Admin login check
+    /*
+     * Checks if the inputted credentials matches with the admin account 
+     */
     public boolean isAdmin(String username, String password) {
         return username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD);
     }
 
+    /*
+     * Reloads the files from the CSV file.
+     * This is used when adding newly created accounts 
+     */
     public void refreshAccounts() {
-        accounts.clear(); // Clear existing accounts
-        loadAccountsFromCSV(); // Reload accounts from the CSV file
+        accounts.clear(); 
+        loadAccountsFromCSV(); 
     }
 }

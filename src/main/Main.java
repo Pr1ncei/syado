@@ -1,6 +1,10 @@
 /*
  * Syado: Account Management System
  * 
+ * 
+ * 
+ * 
+ * 
  * @author: PROGSDATS: Group 5 
  * @version: v1.0.0-beta.1 
  */
@@ -167,8 +171,7 @@
                  System.out.println("Welcome to the Computer Shop Account Management System");
                  System.out.println("1. Create Account");
                  System.out.println("2. Log In");
-                 System.out.println("3. Display All Accounts");
-                 System.out.println("4. Exit");
+                 System.out.println("3. Exit");
                  System.out.print("Choose an option: ");
                  int choice = input.nextInt();
                  input.nextLine();
@@ -176,8 +179,7 @@
                  switch (choice) {
                      case 1 -> createAccount();
                      case 2 -> loggedInAccount = login();
-                     case 3 -> admin.displayAllAccounts();
-                     case 4 -> {
+                     case 3 -> {
                          System.out.println("Exiting the system.");
                          input.close();
                          System.exit(0);
