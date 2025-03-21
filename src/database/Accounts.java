@@ -40,10 +40,11 @@ public class Accounts {
 
     // Deposit funds
     public void deposit(double amount) {
-        balance += amount;
-        if (timer != null) {
-            timer.addFunds(amount); // Update timer balance
+        if (balance + amount < 0) {
+            System.out.println("Error: Insufficient funds.");
+            return;
         }
+        balance += amount;
     }
 
     // Method to display account information

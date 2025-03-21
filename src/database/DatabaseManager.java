@@ -30,11 +30,18 @@ public class DatabaseManager {
             br.readLine(); // Skip header
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.split(",");
-                if (tokens.length == 3) { // Adjusted to read balance
-                    String username = tokens[0].trim();
-                    String password = tokens[1].trim();
-                    double balance = Double.parseDouble(tokens[2].trim());
-                    accounts.put(username, new Accounts(username, password, balance));
+                if (tokens.length == 3) {
+                    try {
+                        String username = tokens[0].trim();
+                        String password = tokens[1].trim();
+                        double balance = Double.parseDouble(tokens[2].trim()); // Now safely handled
+                        
+                        accounts.put(username, new Accounts(username, password, balance));
+                    } catch (NumberFormatException e) {
+                        System.out.println("Skipping invalid account entry: " + line); // Prevents crash
+                    }
+                } else {
+                    System.out.println("Skipping malformed line: " + line); // Handles incomplete data
                 }
             }
         } catch (IOException e) {

@@ -66,9 +66,7 @@ public class AccountTimer {
 
     public void addFunds(double amount) {
         if (amount > 0) {
-            balance += amount;
-            System.out.println("Funds added: P" + amount);
-            System.out.println("New balance: P" + balance);
+            account.deposit(amount);
         } else {
             System.out.println("Invalid amount. Please enter a positive value.");
         }
