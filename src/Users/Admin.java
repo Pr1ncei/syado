@@ -1,9 +1,8 @@
 package Users;
 
-import java.util.*;
-
 import database.Accounts;
 import database.DatabaseManager;
+import java.util.*;
 
 // import org.junit.platform.reporting.shadow.org.opentest4j.reporting.events.core.Data;
 
@@ -50,7 +49,7 @@ public class Admin {
 
     public boolean checkAccountExist(String username) {
         return accounts.containsKey(username);
-    }
+    }       
 
     public Accounts getAccount(String username) {
         return accounts.get(username);

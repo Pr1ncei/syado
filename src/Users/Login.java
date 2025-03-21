@@ -1,14 +1,19 @@
 package Users;
 
+import database.Accounts;
+import java.io.*;
 import java.util.*;
 
-import database.Accounts;
 
-import java.io.*;
-
+/*
+ * The Login class contains 
+ */
 public class Login {
     private static List<Accounts> users;
 
+    /*
+     * Reads the Users 
+     */
     public static synchronized void readUsers() {
         if (users == null) {
             users = new ArrayList<>();
@@ -26,8 +31,15 @@ public class Login {
                 System.out.println("Error: File not found.");
             }
         }
-    }
-    
+    }    
+
+    /*
+     * Finds the user in the CSV file
+     * 
+     * @param username 
+     * @param password
+     * @return True if there's an account in the 
+     */
     public static synchronized boolean find(String username, String password) {
         readUsers(); // Ensure data is loaded
         return users.stream()

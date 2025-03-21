@@ -1,28 +1,28 @@
 package database;
 
-import Utilities.Timer;
+import Utilities.AccountTimer;
 
 public class Accounts {
     private String username;
     private String password;
     private double balance;
-    private Timer timer; // Timer instance
+    private AccountTimer timer; // Timer instance
 
     // Main Constructor
     public Accounts(String username, String password) {
         this.username = username;
         this.password = password;
         this.balance = 0.0;
-        this.timer = new Timer(balance); // Initialize Timer with the account balance
+        this.timer = new AccountTimer(this); // Pass the Accounts instance itself
     }
-
-    // Overloaded constructor to set balance
+    
     public Accounts(String username, String password, double balance) {
         this.username = username;
         this.password = password;
         this.balance = balance;
-        this.timer = new Timer(balance); // Initialize Timer with the account balance
+        this.timer = new AccountTimer(this); // Pass the Accounts instance itself
     }
+    
 
     // Getter methods
 
@@ -70,8 +70,15 @@ public class Accounts {
     }
 
     public void stopTimer() {
-        if (timer != null) {
-            timer.stopTimer(); // Stop the timer
-        }
+        timer.stopTimer(); // Stop the timer
     }
+
+    public void updateBalance(double amount) {
+        this.balance += amount; // Update the balance in memory
+        DatabaseManager dm = new DatabaseManager();
+        dm.getAccounts().put(this.username, this); // Ensure the updated account is in the database
+        dm.saveAccounts(); // Save the new balance to CSV
+        dm.refreshAccounts();
+    }
+    
 }
